@@ -1,8 +1,10 @@
-# resolve
+# resolve-bower
+
+based off of substack's [resolve](http://github.com/substack/node-resolve)
 
 implements the [node `require.resolve()`
 algorithm](http://nodejs.org/docs/v0.4.8/api/all.html#all_Together...)
-such that you can `require.resolve()` on behalf of a file asynchronously and
+such that you can `require.resolve()` on behalf of a bower file asynchronously and
 synchronously
 
 [![build status](https://secure.travis-ci.org/substack/node-resolve.png)](http://travis-ci.org/substack/node-resolve)
@@ -12,7 +14,7 @@ synchronously
 asynchronously resolve:
 
 ``` js
-var resolve = require('resolve');
+var resolve = require('resolve-bower');
 resolve('tap', { basedir: __dirname }, function (err, res) {
     if (err) console.error(err)
     else console.log(res)
@@ -21,26 +23,26 @@ resolve('tap', { basedir: __dirname }, function (err, res) {
 
 ```
 $ node example/async.js
-/home/substack/projects/node-resolve/node_modules/tap/lib/main.js
+/home/substack/projects/node-resolve/bower_components/tap/lib/main.js
 ```
 
 synchronously resolve:
 
 ``` js
-var resolve = require('resolve');
+var resolve = require('resolve-bower');
 var res = resolve.sync('tap', { basedir: __dirname });
 console.log(res);
 ```
 
 ```
 $ node example/sync.js
-/home/substack/projects/node-resolve/node_modules/tap/lib/main.js
+/home/substack/projects/node-resolve/bower_components/tap/lib/main.js
 ```
 
 # methods
 
 ``` js
-var resolve = require('resolve')
+var resolve = require('resolve-bower')
 ```
 
 ## resolve(pkg, opts={}, cb)
@@ -59,14 +61,14 @@ options are:
 
 * opts.isFile - function to asynchronously test whether a file exists
 
-* opts.packageFilter - transform the parsed package.json contents before looking
+* opts.packageFilter - transform the parsed bower.json contents before looking
 at the "main" field
 
 * opts.paths - require.paths array to use if nothing is found on the normal
-node_modules recursive walk (probably don't use this)
+bower_components recursive walk (probably don't use this)
 
 * opts.moduleDirectory - directory to recursively look for modules in. default:
-`"node_modules"`
+`"bower_components"`
 
 default `opts` values:
 
@@ -83,7 +85,7 @@ default `opts` values:
             else cb(null, stat.isFile())
         });
     },
-    moduleDirectory: 'node_modules'
+    moduleDirectory: 'bower_components'
 }
 ```
 
@@ -102,14 +104,14 @@ options are:
 
 * opts.isFile - function to synchronously test whether a file exists
 
-* opts.packageFilter - transform the parsed package.json contents before looking
+* opts.packageFilter - transform the parsed bower.json contents before looking
 at the "main" field
 
 * opts.paths - require.paths array to use if nothing is found on the normal
-node_modules recursive walk (probably don't use this)
+bower_components recursive walk (probably don't use this)
 
 * opts.moduleDirectory - directory to recursively look for modules in. default:
-`"node_modules"`
+`"bower_components"`
 
 default `opts` values:
 
@@ -123,7 +125,7 @@ default `opts` values:
         try { return fs.statSync(file).isFile() }
         catch (e) { return false }
     },
-    moduleDirectory: 'node_modules'
+    moduleDirectory: 'bower_components'
 }
 ````
 

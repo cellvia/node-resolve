@@ -1,69 +1,69 @@
 var test = require('tap').test;
-var resolve = require('../');
+var resolveBower = require('../');
 
 test('foo', function (t) {
     var dir = __dirname + '/resolver';
-    
+
     t.equal(
-        resolve.sync('./foo', { basedir : dir }),
+        resolveBower.sync('./foo', { basedir : dir }),
         dir + '/foo.js'
     );
-    
+
     t.equal(
-        resolve.sync('./foo.js', { basedir : dir }),
+        resolveBower.sync('./foo.js', { basedir : dir }),
         dir + '/foo.js'
     );
-    
+
     t.throws(function () {
-        resolve.sync('foo', { basedir : dir });
+        resolveBower.sync('foo', { basedir : dir });
     });
-    
+
     t.end();
 });
 
 test('bar', function (t) {
     var dir = __dirname + '/resolver';
-    
+
     t.equal(
-        resolve.sync('foo', { basedir : dir + '/bar' }),
-        dir + '/bar/node_modules/foo/index.js'
+        resolveBower.sync('foo', { basedir : dir + '/bar' }),
+        dir + '/bar/bower_components/foo/index.js'
     );
     t.end();
 });
 
 test('baz', function (t) {
     var dir = __dirname + '/resolver';
-    
+
     t.equal(
-        resolve.sync('./baz', { basedir : dir }),
+        resolveBower.sync('./baz', { basedir : dir }),
         dir + '/baz/quux.js'
     );
     t.end();
 });
 
 test('biz', function (t) {
-    var dir = __dirname + '/resolver/biz/node_modules';
+    var dir = __dirname + '/resolver/biz/bower_components';
     t.equal(
-        resolve.sync('./grux', { basedir : dir }),
+        resolveBower.sync('./grux', { basedir : dir }),
         dir + '/grux/index.js'
     );
-    
+
     t.equal(
-        resolve.sync('tiv', { basedir : dir + '/grux' }),
+        resolveBower.sync('tiv', { basedir : dir + '/grux' }),
         dir + '/tiv/index.js'
     );
-    
+
     t.equal(
-        resolve.sync('grux', { basedir : dir + '/tiv' }),
+        resolveBower.sync('grux', { basedir : dir + '/tiv' }),
         dir + '/grux/index.js'
     );
     t.end();
 });
 
 test('normalize', function (t) {
-    var dir = __dirname + '/resolver/biz/node_modules/grux';
+    var dir = __dirname + '/resolver/biz/bower_components/grux';
     t.equal(
-        resolve.sync('../grux', { basedir : dir }),
+        resolveBower.sync('../grux', { basedir : dir }),
         dir + '/index.js'
     );
     t.end();
@@ -72,96 +72,96 @@ test('normalize', function (t) {
 test('cup', function (t) {
     var dir = __dirname + '/resolver';
     t.equal(
-        resolve.sync('./cup', {
+        resolveBower.sync('./cup', {
             basedir : dir,
             extensions : [ '.js', '.coffee' ]
         }),
         dir + '/cup.coffee'
     );
-    
+
     t.equal(
-        resolve.sync('./cup.coffee', {
+        resolveBower.sync('./cup.coffee', {
             basedir : dir
         }),
         dir + '/cup.coffee'
     );
-    
+
     t.throws(function () {
-        resolve.sync('./cup', {
+        resolveBower.sync('./cup', {
             basedir : dir,
             extensions : [ '.js' ]
         })
     });
-    
+
     t.end();
 });
 
 test('mug', function (t) {
     var dir = __dirname + '/resolver';
     t.equal(
-        resolve.sync('./mug', { basedir : dir }),
+        resolveBower.sync('./mug', { basedir : dir }),
         dir + '/mug.js'
     );
-    
+
     t.equal(
-        resolve.sync('./mug', {
+        resolveBower.sync('./mug', {
             basedir : dir,
             extensions : [ '.coffee', '.js' ]
         }),
         dir + '/mug.coffee'
     );
-    
+
     t.equal(
-        resolve.sync('./mug', {
+        resolveBower.sync('./mug', {
             basedir : dir,
             extensions : [ '.js', '.coffee' ]
         }),
         dir + '/mug.js'
     );
-    
+
     t.end();
 });
 
 test('other path', function (t) {
-    var resolverDir = __dirname + '/resolver';
-    var dir = resolverDir + '/bar';
-    var otherDir = resolverDir + '/other_path';
+    var resolveBowerDir = __dirname + '/resolver';
+    var dir = resolveBowerDir + '/bar';
+    var otherDir = resolveBowerDir + '/other_path';
 
     var path = require('path');
-    
+
     t.equal(
-        resolve.sync('root', {
+        resolveBower.sync('root', {
             basedir : dir,
             paths: [otherDir] }),
-        resolverDir + '/other_path/root.js'
+        resolveBowerDir + '/other_path/root.js'
     );
-    
+
     t.equal(
-        resolve.sync('lib/other-lib', {
+        resolveBower.sync('lib/other-lib', {
             basedir : dir,
             paths: [otherDir] }),
-        resolverDir + '/other_path/lib/other-lib.js'
+        resolveBowerDir + '/other_path/lib/other-lib.js'
     );
 
     t.throws(function () {
-        resolve.sync('root', { basedir : dir, });
+        resolveBower.sync('root', { basedir : dir, });
     });
-    
+
     t.throws(function () {
-        resolve.sync('zzz', {
+        resolveBower.sync('zzz', {
             basedir : dir,
             paths: [otherDir] });
     });
-    
+
     t.end();
 });
 
 test('incorrect main', function (t) {
-    var resolverDir = __dirname + '/resolver';
-    var dir = resolverDir + '/incorrect_main';
+    var resolveBowerDir = __dirname + '/resolver';
+    var dir = resolveBowerDir + '/incorrect_main';
 
     t.equal(
-        resolve.sync('./incorrect_main', { basedir : resolverDir }),
+        resolveBower.sync('./incorrect_main', { basedir : resolveBowerDir }),
         dir + '/index.js'
     )
 
@@ -169,11 +169,11 @@ test('incorrect main', function (t) {
 });
 
 test('#25: node modules with the same name as node stdlib modules', function (t) {
-    var resolverDir = __dirname + '/resolver/punycode';
+    var resolveBowerDir = __dirname + '/resolver/punycode';
 
     t.equal(
-        resolve.sync('punycode', { basedir : resolverDir }),
-        resolverDir + '/node_modules/punycode/index.js'
+        resolveBower.sync('punycode', { basedir : resolveBowerDir }),
+        resolveBowerDir + '/bower_components/punycode/index.js'
     )
 
     t.end()

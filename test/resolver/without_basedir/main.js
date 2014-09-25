@@ -1,6 +1,6 @@
-resolve = require('../../../');
+var resolvebower = require('../../../');
 
 module.exports = function(t, cb) {
-  resolve('mymodule', null, cb);
+  resolvebower('mymodule', null, cb);
 }
 
